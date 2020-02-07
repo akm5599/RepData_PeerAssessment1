@@ -6,25 +6,43 @@ output:
 ---
 
 ## Loading packages
-```{r echo=TRUE}
 
+```r
 library(tidyverse)
-library(knitr)
+```
 
+```
+## -- Attaching packages ---------------------------------- tidyverse 1.2.1 --
+```
+
+```
+## v ggplot2 3.2.1     v purrr   0.3.2
+## v tibble  2.1.3     v dplyr   0.8.3
+## v tidyr   1.0.0     v stringr 1.4.0
+## v readr   1.3.1     v forcats 0.4.0
+```
+
+```
+## -- Conflicts ------------------------------------- tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+```
+
+```r
+library(knitr)
 ```
 
 
 ## Loading and preprocessing the data
-```{r echo=TRUE}
 
+```r
 activity <- read.csv("activity.csv")
-
 ```
 
 
 ## What is mean total number of steps taken per day?
-```{r echo=TRUE}
 
+```r
 total_mean <- activity %>%
   group_by(date) %>%
   summarise(total_steps = sum(steps, na.rm = TRUE))
@@ -34,18 +52,31 @@ mean <- mean(total_mean$total_steps, na.rm = TRUE)
 median <- median(total_mean$total_steps, na.rm = TRUE)
 
 hist(total_mean$total_steps, xlab = "Total Steps", main = "Histogram of Total Steps per Day")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-3-1.png)<!-- -->
+
+```r
 mean
+```
 
+```
+## [1] 9354.23
+```
+
+```r
 median
+```
 
+```
+## [1] 10395
 ```
 
 
 
 ## What is the average daily activity pattern?
-```{r echo=TRUE}
 
+```r
 daily_mean <- activity %>%
   group_by(interval) %>%
   summarise(mean_activity = mean(steps, na.rm = TRUE))
@@ -55,17 +86,26 @@ maximum <- daily_mean %>%
   select(interval)
 
 plot(daily_mean$interval, daily_mean$mean_activity, type = "l", xlab = "Interval", ylab = "Mean Steps", main = "Average Daily Activity Pattern")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-4-1.png)<!-- -->
+
+```r
 maximum
+```
 
-
+```
+## # A tibble: 1 x 1
+##   interval
+##      <int>
+## 1      835
 ```
 
 
 
 ## Imputing missing values
-```{r echo=TRUE}
 
+```r
 x <- is.na(activity)
 
 # Make binary variable if there are NAs or not
@@ -92,22 +132,39 @@ mean2 <- mean(activity2$daily_steps)
 median2 <- median(activity2$daily_steps)
 
 total_NA
+```
 
+```
+## [1] 2304
+```
+
+```r
 hist(activity2$daily_steps, xlab = "Daily Steps", main = "Histogram of Daily Steps without Missing Values")
+```
 
+![](PA1_template_files/figure-html/unnamed-chunk-5-1.png)<!-- -->
+
+```r
 mean2
+```
 
+```
+## [1] 37.3826
+```
+
+```r
 median2
+```
 
-
-
+```
+## [1] 0
 ```
 
 
 
 ## Are there differences in activity patterns between weekdays and weekends?
-```{r echo=TRUE}
 
+```r
 day <- weekdays(as.Date(activity2$date))
 
 day <- as.data.frame(day)
@@ -134,8 +191,9 @@ par(mgp = c(2, 0.6, 0))
 plot(weekday_mean$interval, weekday_mean$mean_activity, type = "l", xlab = "Interval", ylab = "Mean Activity", main = "Activity on Weekdays", col = "blue")
 
 plot(weekend_mean$interval, weekend_mean$mean_activity, type = "l", xlab = "Interval", ylab = "Mean Activity", main = "Activity on Weekends", col = "blue")
-
 ```
+
+![](PA1_template_files/figure-html/unnamed-chunk-6-1.png)<!-- -->
 
 
 
